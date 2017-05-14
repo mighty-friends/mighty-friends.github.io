@@ -1,0 +1,253 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title> 마이티 채무 시스템 </title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.1/css/bulma.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style scoped>
+      .container {
+        padding: 1em;
+      }
+    </style>
+	<style lang="css">
+      .is-credit>.amount {
+        color: green;
+      }
+      .is-debit>.amount {
+        color: red;
+      }
+      .invalid {
+        text-decoration: line-through;
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="hero is-primary is-medium is-bold">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            마이티 채무 시스템
+          </h1>
+          <h2 class="subtitle">
+            v0.0.1
+          </h2>
+        </div>
+      </div>
+    </section>
+    <div id="app">
+      <div class="container">
+        <div class="columns">
+          <div class="column is-half is-offset-one-quarter">
+            <div class="tabs is-toggle is-fullwidth">
+              <ul>
+			    <li>
+                  <a @click="state='list'; getlist()">
+                    <span class="icon is-small"><i class="fa fa-list"></i></span>
+                    <span> 거래 </span>
+                  </a>
+                </li>
+                <li @click="state='sum'; getsum()">
+                  <a>
+                    <span class="icon is-small"><i class="fa fa-user"></i></span>
+                    <span> 채권 </span>
+                  </a>
+				</li>
+                <li @click="state='input'">
+                  <a>
+                    <span class="icon is-small"><i class="fa fa-won"></i></span>
+                    <span> 새 거래 </span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+			<div class="field has-addons has-addons-centered">
+	          <p class="control"  v-if="state=='list' | state=='sum'">
+                <span class="select">
+                  <select v-model="user">
+                    <option value="모두"> 모두 </option>
+                    <option v-for="person in people"> {{ person }} </option>
+                  </select>
+                </span>
+              </p>
+              <p class="control"  v-if="state=='list'">
+                <a class="button is-primary" id="copy">
+                  <span> 의 거래 </span>
+				</a>
+			  </p>
+              <p class="control"  v-if="state=='sum'">
+                <a class="button is-primary" id="copy">
+                  <span> 의 채권 </span>
+                  <span class="icon is-small">
+                     <i class="fa fa-copy"></i>
+                  </span>
+                </a>
+              </p>
+	        </div>
+            <div class="">
+			  <div v-if="state=='list'">
+			    <table class="table is-striped" >
+                  <thead class="is-hidden-mobile">
+                    <tr>
+					  <th> 상세 </th>
+                      <th> 날짜 </th>
+			          <th> 채권자 </th>
+                      <th> 채무자 </th>
+                      <th style="text-align:right"> 금액 </th>
+			        </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-if="user=='모두' | i.creditor==user | i.debitor==user" v-for="i in glist" :class="{'is-credit': i.amount > 0, 'is-debit': i.amount < 0}">
+                      <td class="is-hidden-mobile">
+                        <a class="button is-primary" id="copy" v-on:click="">
+                          <span class="icon is-small">
+                            <i class="fa fa-info-circle"></i>
+                          </span>
+                        </a>
+                      </td>
+                      <td class="is-hidden-mobile"> {{ i.time | formatDate }} </td>
+                      <td class="is-hidden-mobile"> {{ i.creditor }} </td>
+                      <td class="is-hidden-mobile"> {{ i.debitor }} </td>
+                      <td class="amount is-hidden-mobile" style="text-align:right"> {{ i.amount }} </td>
+                    </tr>
+                  </tbody>
+                </table>
+			  </div>
+			  <div v-if="state=='sum'">
+                <table class="table is-striped" >
+                  <thead class="is-hidden-mobile">
+                    <tr>
+			          <th v-if="user=='모두'"> 채권자 </th>
+                      <th> 채무자 </th>
+                      <th style="text-align:right"> 금액 </th>
+			        </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-if="(user=='모두' & i.amount>0) | i.creditor==user" v-for="i in gsum" :class="{'is-credit': i.amount > 0, 'is-debit': i.amount < 0}">
+                      <td v-if="user=='모두'" class="is-hidden-mobile"> {{ i.creditor }} </td>
+                      <td class="is-hidden-mobile"> {{ i.debitor }} </td>
+                      <td class="amount is-hidden-mobile" style="text-align:right"> {{ i.amount }} </td>
+                    </tr>
+                  </tbody>
+                </table>
+			  </div>
+			  <div v-if="state=='input'">
+			    <iframe style="width: 100%; height: 100vh; overflow-y: hidden;" src="https://docs.google.com/forms/d/e/1FAIpQLSfZC_dy2gth4GaGkvXCvf0H6tNTuH86ciMlwCa4q9D_TT0hBg/viewform?usp=sf_link"></iframe>
+			  </div>
+			</div>
+          </div>
+        </div>
+      </div>
+      <footer class="footer">
+        <div class="container">
+          <div class="content has-text-centered">
+            <p>
+              <strong> Mighty Credit System </strong>
+              Designed by <a href="http://github.com/YujinGaya"> YujinGaya </a>
+              Developed by <a href="http://wijae.com"> wijae </a>
+            </p>
+            <p>
+              <a class="icon" href="https://github.com/mighty-friends/mighty-money">
+                <i class="fa fa-github"></i>
+              </a>
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
+
+<script src="https://unpkg.com/vue"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script>
+  var app = new Vue({
+    el: '#app',
+      data: {
+        state: "input",
+		glist: [],
+		gsum: [],
+		user: "모두",
+		people: ["강명진", "김성주", "김시환", "김유진", "김현우", "문민준", "서재현", "서표석", "선민규", "송영주", "심유성", "양경모", "위재원", "윤효상", "이정재", "조성준", "조장현", "최대범", "표성준", "한동규", "한충훈"] 
+      },
+	  methods: {
+        csvJSON: function (csv){
+          var lines=csv.split("\r\n")
+          var result = []
+          var headers=lines[0].split(",")
+
+          for(var i=1;i<lines.length;i++){
+	        var obj = {}
+	        var currentline=lines[i].split(",")
+	      
+            for(var j=0;j<headers.length;j++){
+		      obj[headers[j]] = currentline[j]
+	        }
+	        result.push(obj)
+          }
+          return result; //JavaScript object
+          //return JSON.stringify(result); //JSON
+        },
+		getlist: function () {
+          let l = this
+          axios.get('https://docs.google.com/spreadsheets/d/1Udx6CjVXC5pCiUrSqP6FgZW4pFKGNEU-h59VA2k4swY/pub?gid=1324425554&single=true&output=csv')
+            .then(function (response) {
+               l.glist = l.csvJSON(response.data)
+			   l.glist.reverse()
+            })
+            .catch(function (error) {
+              console.log(error)
+              alert('인터넷 연결 상태가 좋지 않거나, 데이터베이스에 문제가 생겼습니다. 개발자에게 문의해주세요.')
+            })
+        },	
+        sumflat: function (json){
+          var result = []
+		  
+          for(var i=1;i<json.length;i++){
+	        var line = json[i]
+	        
+            for(var c in line){
+			  if(line[c] > 0 | line[c] < 0){
+			    result.push({creditor: line.creditor, debitor: c, amount: line[c]})
+			  }
+	        }
+          }
+          return result;
+        },
+		getsum: function () {
+          let l = this
+          axios.get('https://docs.google.com/spreadsheets/d/1Udx6CjVXC5pCiUrSqP6FgZW4pFKGNEU-h59VA2k4swY/pub?gid=1989359521&single=true&output=csv')
+            .then(function (response) {
+               l.gsum = l.sumflat(l.csvJSON(response.data))
+            })
+            .catch(function (error) {
+              console.log(error)
+              alert('인터넷 연결 상태가 좋지 않거나, 데이터베이스에 문제가 생겼습니다. 개발자에게 문의해주세요.')
+            })
+        },
+      },
+      filters: {
+        formatDate: function (date) {
+          var d = date.split(" ")
+		  
+		  for(var i = 0; i <= 1; i++){
+		    d[i] = d[i].replace(".","")
+		  }
+		  
+		  for(var i = 1; i <= 2; i++){
+			if (d[i].length == 1){
+			  d[i] = "0" + d[i]
+			}
+		  }
+		  
+          return d[0] + "-" + d[1] + "-" + d[2]
+        }
+      }
+  })
+</script>
+
+
+
