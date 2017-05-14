@@ -193,7 +193,7 @@
         },
 		getlist: function () {
           let l = this
-          axios.get('https://docs.google.com/spreadsheets/d/1Udx6CjVXC5pCiUrSqP6FgZW4pFKGNEU-h59VA2k4swY/pub?gid=1324425554&single=true&output=csv')
+          axios.get('https://docs.google.com/spreadsheets/d/1Udx6CjVXC5pCiUrSqP6FgZW4pFKGNEU-h59VA2k4swY/pub?gid=1324425554&single=true&output=csv', {headers: { 'crossDomain': true }})
             .then(function (response) {
                l.glist = l.csvJSON(response.data)
 			   l.glist.reverse()
@@ -219,7 +219,7 @@
         },
 		getsum: function () {
           let l = this
-          axios.get('https://docs.google.com/spreadsheets/d/1Udx6CjVXC5pCiUrSqP6FgZW4pFKGNEU-h59VA2k4swY/pub?gid=1989359521&single=true&output=csv')
+          axios.get('https://docs.google.com/spreadsheets/d/1Udx6CjVXC5pCiUrSqP6FgZW4pFKGNEU-h59VA2k4swY/pub?gid=1989359521&single=true&output=csv', {headers: { 'crossDomain': true }})
             .then(function (response) {
                l.gsum = l.sumflat(l.csvJSON(response.data))
             })
