@@ -1,6 +1,12 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
-driver = webdriver.Chrome('chromedriver')
+options = webdriver.ChromeOptions()
+options.add_argument('headless')
+
+driver = webdriver.Chrome()
 driver.implicitly_wait(3)
 
 id_ = 'thgreatseo@gmail.com'
@@ -23,7 +29,8 @@ driver.find_element_by_xpath("//div[@id='leftMyGroupListDiv']/a[@class='present_
 driver.find_element_by_xpath("//div[@id='leftMyGroupSelectDiv']/a[@group_id='934'][@unit_code='6142027'][@school_type='1']").click()
 
 # 위문편지
-driver.find_element_by_xpath("//a[@menu_id='201']/img[@alt='위문편지 쓰기']").click()
+element = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//img[@alt='위문편지 쓰기']")))
+element.click()
 
 # 제목, 내용 입력
 driver.find_element_by_xpath("//input[@class='letter_post_foot'][@id='title']").send_keys(title)
@@ -33,3 +40,5 @@ driver.find_element_by_xpath("//textarea[@id='contents']").send_keys(content)
 driver.find_element_by_xpath("//div[@class='post_btn']/button[@id='btnWrite']").click()
 driver.find_element_by_xpath("//div[@class='ui-dialog-buttonset']").find_element_by_tag_name('button').click()
 driver.find_element_by_xpath("//div[@class='ui-dialog-buttonset']/button").click()
+
+driver.quit()
