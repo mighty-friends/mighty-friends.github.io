@@ -32,4 +32,4 @@ driver.find_element_by_xpath("//textarea[@id='contents']").send_keys(content)
 # 전송
 driver.find_element_by_xpath("//div[@class='post_btn']/button[@id='btnWrite']").click()
 driver.find_element_by_xpath("//div[@class='ui-dialog-buttonset']").find_element_by_tag_name('button').click()
-driver.find_element_by_xpath("//div[@class='ui-dialog-buttonset']/button")click()
+driver.find_element_by_xpath("//div[@class='ui-dialog-buttonset']/button").click()
